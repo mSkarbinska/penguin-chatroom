@@ -25,8 +25,7 @@ const Map = ({desks}:Props) => {
             }}
             />
             )}
-
-<MyPenguin/>
+        <MyPenguin/>
     </Stage>
   )
 }
