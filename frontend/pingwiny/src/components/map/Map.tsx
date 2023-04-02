@@ -2,22 +2,47 @@ import React, {Dispatch, useEffect, useState} from 'react';
 import {Stage} from '@pixi/react';
 import Desk from '../../types/Desk';
 import {Graphics} from '@inlet/react-pixi';
-import MyPenguin from '../penguins/MyPenguin';
 import User from '../../types/User';
-import Penguin from '../penguins/Penguin';
 import Cloud from "../../types/Cloud";
 import { Text } from '@pixi/react';
 import PenguinsContainer from '../penguins/PenguinsContainer';
+import ChatArchiveObject from "../archive/ChatArchiveObject";
+import ArchiveList from "../../types/ArchiveList";
 
 interface Props{
     desks: Desk[],
     user: User,
     setUser: Dispatch<User>,
+    setShowArchiveList: Dispatch<boolean>,
+    showArchiveList: boolean,
+    setChatArchiveList: Dispatch<ArchiveList[]>,
     clouds: Cloud[]
   }
 
-const Map = ({desks, user, setUser, clouds}: Props) => {
+const Map = ({desks, user, setUser, setShowArchiveList, setChatArchiveList, showArchiveList, clouds}:Props) => {
     const [penguinUsers, setPenguinUsers] = useState<User[]>([]);
+    const [showArchiveButton, setShowArchiveButton] = useState(false);
+    const [archiveCoords, setArchiveCoords] = useState({x: window.innerWidth * 0.45, y: 20});
+    
+    const handleArchiveButtonClick = () => {
+      fetch('http://127.0.0.1:5050/archive/' + user["id"], {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+      })
+      .then(response => response.json())
+      .then(data => {
+          setChatArchiveList(data);
+          showArchiveList ? setShowArchiveList(false) : setShowArchiveList(true)
+
+      })
+      .catch(error => {
+          console.error(error);
+          alert('Error: ' + error)
+      });
+    };
+
 
     useEffect(() => {
         const penguinsUpdateInterval = setInterval(() => {
@@ -39,9 +64,24 @@ const Map = ({desks, user, setUser, clouds}: Props) => {
             clearInterval(penguinsUpdateInterval);
         };
     }, []);
+    
+    
+    useEffect(() => {
+        const archiveProximityCheck = setInterval(() => {
+            const dx = user.x - archiveCoords.x;
+            const dy = user.y - archiveCoords.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            setShowArchiveButton(distance < 50);
+        }, 200);
+
+        return () => {
+            clearInterval(archiveProximityCheck);
+        };
+    }, [user]);
+
 
     return (
-    <Stage width={window.innerWidth*0.7} height={window.innerHeight*0.9} options={{ backgroundColor: "e0ebeb", antialias: true }}>
+    <Stage width={window.innerWidth*0.6} height={window.innerHeight*0.9} options={{ backgroundColor: "e0ebeb", antialias: true }}>
         {desks.map((desk, index)=>
         <Graphics
         key={index}
@@ -90,6 +130,7 @@ const Map = ({desks, user, setUser, clouds}: Props) => {
                     }}
                 />
             )}
+        <ChatArchiveObject showButton={showArchiveButton} user={user} archiveCoords={archiveCoords} handleButtonClick={handleArchiveButtonClick}/>
         </Stage>
     )
 }

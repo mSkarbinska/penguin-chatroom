@@ -12,6 +12,10 @@ import Cloud from './types/Cloud';
 
 import Chat from "./components/chat/Chat";
 import ChatType from './types/ChatType';
+import ArchiveObject from "./components/archive/ChatArchiveList";
+import ArchiveList from "./types/ArchiveList";
+
+
 interface Props{
   desks: Desk[],
   clouds: Cloud[],
@@ -20,17 +24,19 @@ interface Props{
 export const App = ({desks, clouds}:Props) =>
 {
   const [user, setUser] = useState<User>();
+  const [showArchiveList, setShowArchiveList] = useState(false);
+  const [chatArchiveList, setChatArchiveList] = useState<ArchiveList[]>([]);
   const [chat, setChat] = useState<ChatType>();
 
   return (
     <>
       {user===undefined ? <LoginPage  setUser={setUser}/> :
-          <div style={{display: 'flex', }}>
+          <div style={{display: 'flex', maxHeight:"90vh"}}>
             <div style={{justifyContent: 'flex-start'}}>
-              {chat && user ? <Chat user={user} chatId={chat.id} nickname={user.nickname}/> : null}
+              {user ? (!showArchiveList ? (chat ? <Chat user={user} chatId={chat.id} nickname={user.nickname}/> : null) : <ArchiveObject user={user} chatArchiveList={chatArchiveList} setChat={setChat} setShowArchiveList={setShowArchiveList}/>) : null}
             </div>
             <div style={{justifyContent: 'flex-end' }}>
-              <Map desks={desks} user={user} clouds={clouds} setUser={setUser}/>
+              <Map desks={desks} user={user} clouds={clouds} setUser={setUser} setShowArchiveList={setShowArchiveList} setChatArchiveList={setChatArchiveList} showArchiveList={showArchiveList} />
             </div>
           </div>}
       {user ? (
