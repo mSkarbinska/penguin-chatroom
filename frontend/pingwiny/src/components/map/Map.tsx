@@ -25,7 +25,8 @@ const Map = ({desks, user, setUser, setShowArchiveList, setChatArchiveList, show
     const [penguinUsers, setPenguinUsers] = useState<User[]>([]);
     const [showArchiveButton, setShowArchiveButton] = useState(false);
     const [archiveCoords, setArchiveCoords] = useState({x: window.innerWidth * 0.45, y: 20});
-    
+    const [newClouds, setClouds] = useState<Cloud[]>([]);
+
     const handleArchiveButtonClick = () => {
       fetch('http://penguins-agh-rest.azurewebsites.net/archive/' + user["id"], {
         method: 'GET',
@@ -53,7 +54,9 @@ const Map = ({desks, user, setUser, setShowArchiveList, setChatArchiveList, show
             .then(response => response.json())
             .then(data => {
                 const otherPenguings = data["users"].filter((onePenguin: User) => onePenguin.id != user.id);
-        
+                const newCloudsList = data["chat_clouds"]
+
+                setClouds(newCloudsList)
                 setPenguinUsers(otherPenguings);
             })
             .catch(error => {
@@ -95,7 +98,7 @@ const Map = ({desks, user, setUser, setShowArchiveList, setChatArchiveList, show
         />
         )}
         <PenguinsContainer user={user} penguins={penguinUsers} setUser={setUser} setChat={setChat}/>
-        {clouds.map((cloud, index) =>
+        {newClouds.map((cloud, index) =>
                 <Graphics
                     key={index}
                     draw={g => {
@@ -109,7 +112,7 @@ const Map = ({desks, user, setUser, setShowArchiveList, setChatArchiveList, show
                     }}
                 />
             )}
-            {clouds.map((cloud, index) =>
+            {newClouds.map((cloud, index) =>
                 <Text
                   text={cloud.text}
                   x={cloud.x + 60}
