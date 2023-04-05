@@ -128,3 +128,5 @@ The frontend application was written in React with PixiJS and React Redux librar
 #### Archive and Spotify views
 
 ![Archive and Spotify views](./images/mockup_archive_spotify.png)
+
+### Retro summary available [here](https://docs.google.com/document/d/13KgfaAktUGKDpNlLqomJM_HM2gQrgXCGaII5BjkcpSM/edit?usp=sharing)!
