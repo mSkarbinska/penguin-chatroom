@@ -20,8 +20,6 @@ There was an idea to bring together a group of penguins to see if they could com
 
 This idea is the basis of our project - creating a virtual environment that would allow users to move around on the map and also to chat with other users when we are close to each other.
 
-## Retro summary available [here](https://docs.google.com/document/d/13KgfaAktUGKDpNlLqomJM_HM2gQrgXCGaII5BjkcpSM/edit?usp=sharing)!
-
 ## Screenshots
 
 ### Login
