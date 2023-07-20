@@ -1,9 +1,3 @@
-# How to play
-
-The application can be accessed at http://penguins-agh.azurewebsites.net.
-
-We simply just go to this link, enter our username and we can play the game! We can move using the arrows. There are status buttons on the bottom of the screen. To chat we need to approach another user and then click on the pop-up window.
-
 # Penguins documentation
 
 Penguins is a project created for an AGH organized hackathon, where the given topic was "games and AI". 
